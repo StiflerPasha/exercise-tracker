@@ -14,7 +14,7 @@ const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true })
    .then(r => {
       let {host, port} = r.connections[0];
-      console.log(`Host: ${host} \nPort: ${port}`.trim())
+      console.log(`Host: ${host} \nPort: ${port}`)
    });
 
 const connection = mongoose.connection;
