@@ -90,7 +90,7 @@ const ExerciseForm = (props) => {
 
    return (
 	  <div>
-		 <h3>{ isCreate ? 'Create New' : 'Update' } Exercise Log</h3>
+		 <h3 className={'mb-3'}>{ isCreate ? 'Create New' : 'Update' } Exercise Log</h3>
 		 <form onSubmit={ onSubmit }>
 			<div className="form-group">
 			   <label>Username: </label>

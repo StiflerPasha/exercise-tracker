@@ -36,7 +36,7 @@ const ExerciseList = () => {
 
    return (
 	  <div>
-		 <h3>Logged Exercises</h3>
+		 <h3 className={'mb-3'}>Logged Exercises</h3>
 		 <table className={ 'table' }>
 			<thead className={ 'thead-light' }>
 			<tr>
