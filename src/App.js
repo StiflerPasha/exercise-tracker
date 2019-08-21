@@ -1,11 +1,10 @@
 import React                              from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Navbar                             from './components/navbar.component';
-import ExerciseList                       from './components/exercises-list.component';
-import CreateExercise                     from './components/create-exercise.component';
-import EditExercise                       from './components/edit-exercise.component';
-import CreateUser                         from './components/create-user.component';
+import Navbar                             from './components/navbar';
+import ExerciseList                       from './components/exercises-list';
+import ExerciseForm                       from './components/exercise-form';
+import CreateUser                         from './components/create-user';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const App = () => {
@@ -13,9 +12,9 @@ const App = () => {
 	  <Router>
 		 <div className="container">
 			<Navbar />
-			<Route path={ '/' } exact component={ ExerciseList } />
-			<Route path={ '/edit/:id' } component={ EditExercise } />
-			<Route path={ '/create' } component={ CreateExercise } />
+			<Route path={ '/' } exact render={() => <ExerciseList />} />
+			<Route path={ '/edit/:id' } component={ ExerciseForm } />
+			<Route path={ '/create' } component={ ExerciseForm } />
 			<Route path={ '/user' } component={ CreateUser } />
 		 </div>
 	  </Router>

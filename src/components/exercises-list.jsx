@@ -6,6 +6,14 @@ import axios                          from 'axios';
 const ExerciseList = () => {
    const [exercises, setExercises] = useState([]);
 
+   useEffect(() => {
+	  axios.get('http://localhost:5000/exercises')
+		 .then(res => {
+			setExercises(res.data);
+		 })
+		 .catch(error => console.log(error));
+   }, []);
+
    const deleteExercise = (id) => {
 	  axios.delete('http://localhost:5000/exercises/' + id)
 		 .then(res => console.log(res.data));
@@ -24,15 +32,6 @@ const ExerciseList = () => {
 		 </td>
 	  </tr>
    ));
-
-
-   useEffect(() => {
-	  axios.get('http://localhost:5000/exercises')
-		 .then(res => {
-			setExercises(res.data);
-		 })
-		 .catch(error => console.log(error));
-   }, []);
 
 
    return (

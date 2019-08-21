@@ -3,7 +3,7 @@ import DatePicker                     from 'react-datepicker';
 import axios                          from 'axios';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const EditExercise = (props) => {
+const ExerciseForm = (props) => {
    const [state, setState] = useState({
 	  username: '',
 	  description: '',
@@ -12,34 +12,46 @@ const EditExercise = (props) => {
 	  users: [],
    });
 
+   const isCreate = props.match.path === '/create';
 
-   const options = state.users.map(user => (
-	  <option key={ user } value={ user }>{ user }</option>
+   const options = state.users.map((user, i) => (
+	  <option key={ i } value={ user }>{ user }</option>
    ));
 
    useEffect(() => {
-	  const setData = async () => {
-		 const getUsers = axios.get('http://localhost:5000/users');
-		 const getEx = axios.get('http://localhost:5000/exercises/' + props.match.params.id);
-		 const [res1, res2] = await Promise.all([getUsers, getEx]);
+	  const setData = isCreate ?
 
-		 const { username, date, description, duration } = res2.data;
-		 const users = res1.data.map(user => user.username);
+		 (async () => {
+			const getUsers = await axios.get('http://localhost:5000/users');
+			if (getUsers.data.length > 0) {
+			   setState({
+				  ...state,
+				  users: getUsers.data.map(user => user.username),
+				  username: getUsers.data[0].username,
+			   });
+			}
+		 }) :
 
-		 setState({
-			username,
-			date: new Date(date),
-			duration,
-			description,
-			users,
+		 (async () => {
+			const [getUsers, getEx] = await Promise.all([
+			   axios.get('http://localhost:5000/users'),
+			   axios.get('http://localhost:5000/exercises/' + props.match.params.id)]);
+
+			const { username, description, duration, date } = getEx.data;
+			const users = getUsers.data.map(user => user.username);
+
+			setState({
+			   ...state,
+			   username,
+			   description,
+			   duration,
+			   date: new Date(date),
+			   users,
+			});
 		 });
 
-	  };
-
-	  setData().then(() => console.log('Data received!'));
+	  setData().then(() => console.log(`Data received for ${ isCreate ? 'Create' : 'Edit' } form`));
    }, []);
-
-
 
    const onChangeUsername = (e) => {
 	  setState({ ...state, username: e.target.value });
@@ -67,15 +79,18 @@ const EditExercise = (props) => {
 		 date: state.date,
 	  };
 
-	  axios.post('http://localhost:5000/exercises/update/' + props.match.params.id, exercise)
-		 .then(res => console.log(res.data));
+	  isCreate ?
+		 axios.post('http://localhost:5000/exercises/add', exercise)
+			.then(res => console.log(res.data)) :
+		 axios.post('http://localhost:5000/exercises/update/' + props.match.params.id, exercise)
+			.then(res => console.log(res.data));
 
 	  window.location = '/';
    };
 
    return (
 	  <div>
-		 <h3>Update Exercise Log</h3>
+		 <h3>{ isCreate ? 'Create New' : 'Update' } Exercise Log</h3>
 		 <form onSubmit={ onSubmit }>
 			<div className="form-group">
 			   <label>Username: </label>
@@ -92,16 +107,14 @@ const EditExercise = (props) => {
 					  required
 					  className={ 'form-control' }
 					  value={ state.description }
-					  onChange={ onChangeDescription }
-			   />
+					  onChange={ onChangeDescription } />
 			</div>
 			<div className="form-group">
 			   <label>Duration (in minutes): </label>
 			   <input type="text"
 					  className={ 'form-control' }
 					  value={ state.duration }
-					  onChange={ onChangeDuration }
-			   />
+					  onChange={ onChangeDuration } />
 			</div>
 			<div className="form-group">
 			   <label>Date: </label>
@@ -114,14 +127,12 @@ const EditExercise = (props) => {
 
 			<div className="form-group">
 			   <input type="submit"
-					  value={ 'Update Exercise Log' }
-					  className={ 'btn btn-primary' }
-			   />
+					  value={ `${ isCreate ? 'Create' : 'Update' } Exercise Log` }
+					  className={ 'btn btn-primary' } />
 			</div>
 		 </form>
 	  </div>
    );
 };
 
-export default EditExercise;
-
+export default ExerciseForm;
