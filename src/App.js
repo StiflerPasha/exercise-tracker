@@ -12,7 +12,7 @@ const App = () => {
 	  <Router>
 		 <div className="container">
 			<Navbar />
-			<Route path={ '/' } exact render={() => <ExerciseList />} />
+			<Route path={ '/' } exact render={ () => <ExerciseList /> } />
 			<Route path={ '/edit/:id' } component={ ExerciseForm } />
 			<Route path={ '/create' } component={ ExerciseForm } />
 			<Route path={ '/user' } component={ CreateUser } />

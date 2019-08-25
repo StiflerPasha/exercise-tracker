@@ -53,8 +53,17 @@ const ExerciseForm = (props) => {
 	  setData().then(() => console.log(`Data received for ${ isCreate ? 'Create' : 'Edit' } form`));
    }, []);
 
-   const onChangeUsername = (e) => {
-	  setState({ ...state, username: e.target.value });
+   const handleOnChange = (e, val) => {
+		setState({
+		   ...state, [val]: e.target.value
+		})
+   };
+
+ /*  const onChangeUsername = (e, val) => {
+	  //setState({ ...state, username: e.target.value });
+	  console.log(state, {
+	     ...state, [val]: e.target.value
+	  })
    };
 
    const onChangeDescription = (e) => {
@@ -63,7 +72,7 @@ const ExerciseForm = (props) => {
 
    const onChangeDuration = (e) => {
 	  setState({ ...state, duration: e.target.value });
-   };
+   };*/
 
    const onChangeDate = (date) => {
 	  setState({ ...state, date });
@@ -90,14 +99,14 @@ const ExerciseForm = (props) => {
 
    return (
 	  <div>
-		 <h3 className={'mb-3'}>{ isCreate ? 'Create New' : 'Update' } Exercise Log</h3>
+		 <h3 className={ 'mb-3' }>{ isCreate ? 'Create New' : 'Update' } Exercise Log</h3>
 		 <form onSubmit={ onSubmit }>
 			<div className="form-group">
 			   <label>Username: </label>
 			   <select required
 					   className={ 'form-control' }
 					   value={ state.username }
-					   onChange={ onChangeUsername }>
+					   onChange={(e) => handleOnChange(e,'username') }>
 				  { options }
 			   </select>
 			</div>
@@ -107,14 +116,14 @@ const ExerciseForm = (props) => {
 					  required
 					  className={ 'form-control' }
 					  value={ state.description }
-					  onChange={ onChangeDescription } />
+					  onChange={(e) => handleOnChange(e, 'description') } />
 			</div>
 			<div className="form-group">
 			   <label>Duration (in minutes): </label>
 			   <input type="text"
 					  className={ 'form-control' }
 					  value={ state.duration }
-					  onChange={ onChangeDuration } />
+					  onChange={ (e) => handleOnChange(e, 'duration') } />
 			</div>
 			<div className="form-group">
 			   <label>Date: </label>
